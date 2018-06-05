@@ -69,16 +69,30 @@ class HT16K33:
     For example, to turn on the LED at (x, y) = (11, 5), set the D3 bit of 0x0B.
 
     """
-    def __init__(self, i2c, address=0x70):
+    def __init__(self, i2c, address=0x70, size=(16,8), auto_write=True):
         self.i2c_device = i2c_device.I2CDevice(i2c, address)
         self._temp = bytearray(1)
         self._buffer = bytearray(17)
+        self._size = size
+        self._auto_write = auto_write
         self.fill(0)
         self._write_cmd(_HT16K33_OSCILATOR_ON)
         self._blink_rate = None
         self._brightness = None
         self.blink_rate = 0
         self.brightness = 15
+
+    @property
+    def auto_write(self):
+        return self._auto_write
+
+    @auto_write.setter
+    def auto_write(self, auto_write):
+        self._auto_write = auto_write
+
+    @property
+    def size(self):
+        return self._size
 
     @property
     def blink_rate(self):
@@ -127,12 +141,14 @@ class HT16K33:
         fill = 0xff if color else 0x00
         for i in range(16):
             self._buffer[i+1] = fill
+        if self._auto_write:
+            self.show()
 
     def _pixel(self, x, y, color=None):
-        if not 0 <= x <= 15:
-            raise ValueError('X value out of range: 0-15')
-        if not 0 <= y <= 7:
-            raise ValueError('Y value out of range: 0-7')
+        if not 0 <= x < self.size[0]:
+            raise ValueError('X value out of range: 0-{}'.format(self.size[0]-1))
+        if not 0 <= y < self.size[1]:
+            raise ValueError('Y value out of range: 0-{}'.format(self.size[1]-1))
         addr = 2*y + x // 8
         mask = 1 << x % 8
         if color is None:
@@ -143,6 +159,8 @@ class HT16K33:
         else:
             # clear the bit
             self._buffer[addr + 1] &= ~mask
+        if self._auto_write:
+            self.show()
 
     def _write_cmd(self, byte):
         self._temp[0] = byte
