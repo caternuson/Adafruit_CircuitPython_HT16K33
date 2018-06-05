@@ -13,14 +13,11 @@
     :target: https://travis-ci.org/adafruit/Adafruit_CircuitPython_HT16K33
     :alt: Build Status
 
-This is a library for using the I²C-based LED matrices with the HT16K33 chip.
-It supports both 16x8 and 8x8 matrices, as well as 7- and 14-segment displays.
+This is a library for the HT16K33 chip.
 
 * **Notes**
 
     #. This library is intended for Adafruit CircuitPython's API.  For a library compatible with MicroPython machine API see this `library <https://github.com/adafruit/micropython-adafruit-ht16k33>`_.
-
-    #. This library does not work with the Trellis 4x4 LED+Keypad board. For that product use: `CircuitPython Trellis Library <https://github.com/adafruit/Adafruit_CircuitPython_Trellis/releases/latest>`_
 
 Dependencies
 =============
@@ -38,38 +35,7 @@ Usage Example
 
 .. code-block :: python
 
-    # Import all board pins.
-    from board import *
-    import busio
-
-    # Import the HT16K33 LED matrix module.
-    from adafruit_ht16k33 import matrix
-
-    # Create the I2C interface.
-    i2c = busio.I2C(SCL, SDA)
-
-    # Create the matrix class.
-    # This creates a 16x8 matrix:
-    matrix = matrix.Matrix16x8(i2c)
-    # Or this creates a 8x8 matrix:
-    #matrix = matrix.Matrix8x8(i2c)
-    # Or this creates a 8x8 bicolor matrix:
-    #matrix = matrix.Matrix8x8x2
-    # Finally you can optionally specify a custom I2C address of the HT16k33 like:
-    #matrix = matrix.Matrix16x8(i2c, address=0x70)
-
-    # Clear the matrix.  Always call show after changing pixels to make the display
-    # update visible!
-    matrix.fill(0)
-    matrix.show()
-
-    # Set a pixel in the origin 0,0 position.
-    matrix.pixel(0, 0, 1)
-    # Set a pixel in the middle 8, 4 position.
-    matrix.pixel(8, 4, 1)
-    # Set a pixel in the opposite 15, 7 position.
-    matrix.pixel(15, 7, 1)
-    matrix.show()
+    # TODO - add example
 
 Contributing
 ============
